@@ -1,0 +1,18 @@
+version: "2"
+services: 
+  ticket-management:
+    container_name: ticket-management 
+    build: .
+    tty: true
+    stdin_open: true
+    working_dir: /home/app/workdir
+    # environment: 
+    volumes: 
+    - $PWD:/home/app/workdir
+    - /home/app/workdir/node_modules
+    ports: 
+    - "19050:8889"
+    networks: 
+    - dev-base
+networks: 
+  dev-base:
