@@ -6,7 +6,12 @@ services:
     tty: true
     stdin_open: true
     working_dir: /home/app/workdir
-    # environment: 
+    environment: 
+    - DYNAMO_HOST=dynamoDB
+    - DYNAMO_PORT=8000
+    - AWS_REGION=us-east-1
+    - AWS_ACCESS_KEY_ID=local
+    - AWS_SECRET_ACCESS_KEY=local
     volumes: 
     - $PWD:/home/app/workdir
     - /home/app/workdir/node_modules
@@ -14,5 +19,28 @@ services:
     - "19050:8889"
     networks: 
     - dev-base
+
+  # dynamodb database
+  dynamodb:
+    container_name: dynamodb
+    image: amazon/dynamodb-local:1.13.6
+    volumes:
+      - /home/dynamodblocal
+    ports:
+      - "8000:8000"
+    networks:
+      - dev-base
+    
+  # dynamodb-manager
+  dynamodb-manager:
+    container_name: dynamodb-manager
+    image: taydy/dynamodb-manager
+    ports:
+      - "8002:80"
+    privileged: true
+    restart: always
+    networks:
+      - dev-base
+  
 networks: 
   dev-base:
